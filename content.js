@@ -9,6 +9,10 @@ function update_time(message){
     var hours = Math.floor(message.time / 3600);
     var minutes = Math.floor((message.time - hours * 3600) / 60);
     var seconds = Math.floor(message.time % 60);
-    document.getElementById("time-span").innerHTML = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
+    var displayText = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
+    if (message.state == "idle"){
+        displayText += ' - Idle'
+    }
+    document.getElementById("time-span").innerHTML = displayText;
 }
 // fix the on all tabs close case - afk case (5 min time out)
