@@ -1,5 +1,11 @@
+var tabUrl;
+var tabId;
+var globalTimers = {};
+var currentState = "active";
+var visibilityState = "visible";
+
 setInterval(function(){
-		chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabArray) {
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabArray) {
 
 			var tabData = tabArray[0];
 			// If the tab isn't valid (usually the chrome console)
@@ -20,9 +26,13 @@ setInterval(function(){
 				chrome.idle.queryState(15, function(status){
 					currentState = status;
 				});
+				
+				chrome.tabs.sendMessage(tabId, {visibilityRequest: "true"}, function(visibility){
+					visibilityState = visibility;
+				});
 
-				console.log(currentState);
-				if(currentState == 'active'){
+				console.log(visibilityState);
+				if(currentState == 'active' && visibilityState == 'visible'){
 					globalTimers[tabUrl] += 1;
 				}
 
@@ -35,12 +45,6 @@ setInterval(function(){
 
 		}
 	)}, 1000);
-
-var tabUrl;
-var tabId;
-var globalTimers = {};
-var currentState = "active";
-
 
 function is_google_doc(tab_url){
 	if (tab_url.includes("/edit")){
