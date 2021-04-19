@@ -1,2 +1,2 @@
 # Google-Docs-Time-Tracker
-WIP
+Tracks usage time on a Google Doc
