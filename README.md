@@ -1,2 +1,2 @@
-# Google-Docs-Time-Tracker
+# Docs-Time-Tracker
 Tracks usage time on a Google Doc
