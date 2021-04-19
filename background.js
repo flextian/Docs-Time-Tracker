@@ -1,6 +1,6 @@
 var tabUrl;
 var tabId;
-var globalTimers = {};
+var timeStorage = {};
 var currentState = "active";
 var visibilityState = "visible";
 
@@ -18,12 +18,12 @@ setInterval(function(){
 				tabId = tabData.id;
 			}
 
-			if (is_google_doc(tabUrl)){
-				if (!(tabUrl in globalTimers)){
-					globalTimers[tabUrl] = 0;
+			if (isGoogleDoc(tabUrl)){
+				if (!(tabUrl in timeStorage)){
+					timeStorage[tabUrl] = 0;
 				}
 				
-				chrome.idle.queryState(15, function(status){
+				chrome.idle.queryState(30, function(status){
 					currentState = status;
 				});
 				
@@ -33,21 +33,21 @@ setInterval(function(){
 
 				console.log(visibilityState);
 				if(currentState == 'active' && visibilityState == 'visible'){
-					globalTimers[tabUrl] += 1;
+					timeStorage[tabUrl] += 1;
 				}
 
-				chrome.tabs.sendMessage(tabId, {time: globalTimers[tabUrl], state: currentState});
+				chrome.tabs.sendMessage(tabId, {time: timeStorage[tabUrl], state: currentState});
 
 			}
 
-			console.log(globalTimers);
+			console.log(timeStorage);
 
 
 		}
 	)}, 1000);
 
-function is_google_doc(tab_url){
-	if (tab_url.includes("/edit")){
+function isGoogleDoc(url){
+	if (url.includes("/edit")){
 		return true;
 	}
 	else {

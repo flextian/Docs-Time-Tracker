@@ -1,10 +1,10 @@
-/* eslint-disable no-undef */
-chrome.runtime.onMessage.addListener(process_message);
+chrome.runtime.onMessage.addListener(processMessage);
 var html = '<div class="docs-title-widget goog-inline-block" id="docs-title-widget timer-thing"><div class="docs-title-input-label" style="pointer-events: none; max-width: 621px;"><span id ="time-span"></span></div></div>';
+
 $('.docs-activity-indicator-container').append(html);
 
 // After json is sent to doc tab
-function process_message(message, sender, sendResponse){
+function processMessage(message, sender, sendResponse){
 
     console.log(message)
 
