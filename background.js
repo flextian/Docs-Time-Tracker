@@ -3,6 +3,8 @@ var tabId;
 var currentState = "active";
 var visibilityState = "visible";
 
+resetStorage()
+
 // Check to see if local storage already exists
 chrome.storage.sync.get(["timeStorage"], function(items){
 
@@ -15,7 +17,7 @@ chrome.storage.sync.get(["timeStorage"], function(items){
 });
 
 
-
+// Called every second
 setInterval(function(){
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabArray) {
 
@@ -31,12 +33,14 @@ setInterval(function(){
 			}
 
 			if (isGoogleDoc(tabUrl)){
+
+				var tabUrlShortened = parseDocsUrl(tabUrl);
 				
 				// If docs tab is not in storage
 				chrome.storage.sync.get(["timeStorage"], function(items){				
 
-					if (!(tabUrl in items['timeStorage'])){
-						items['timeStorage'][tabUrl] = 0;
+					if (!(tabUrlShortened in items['timeStorage'])){
+						items['timeStorage'][tabUrlShortened] = 0;
 					}
 
 					chrome.idle.queryState(30, function(status){
@@ -50,10 +54,10 @@ setInterval(function(){
 					console.log(visibilityState);
 
 					if(currentState == 'active' && visibilityState == 'visible'){
-						items['timeStorage'][tabUrl] += 1;
+						items['timeStorage'][tabUrlShortened] += 1;
 					}
 
-					chrome.tabs.sendMessage(tabId, {time: items['timeStorage'][tabUrl], state: currentState});
+					chrome.tabs.sendMessage(tabId, {time: items['timeStorage'][tabUrlShortened], state: currentState});
 
 					chrome.storage.sync.set({ "timeStorage": items['timeStorage'] }, function(){});
 
@@ -69,6 +73,8 @@ setInterval(function(){
 		}
 	)}, 1000);
 
+
+// Components
 function isGoogleDoc(url){
 	if (url.includes("/edit")){
 		return true;
@@ -76,4 +82,14 @@ function isGoogleDoc(url){
 	else {
 		return false;
 	}
+}
+
+function parseDocsUrl(url){
+	var start = url.indexOf('/d/');
+	var parsed = url.substring(start + 3, start + 47);
+	return parsed;
+}
+
+function resetStorage(){
+	chrome.storage.sync.set({ "timeStorage": {} }, function(){});
 }
