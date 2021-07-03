@@ -62,14 +62,10 @@ setInterval(function(){
 					chrome.storage.sync.set({ "timeStorage": items['timeStorage'] }, function(){});
 
 				});
+
+				printStorage();
 				
 			}
-
-			// For debugging, print timeStorage every second
-			chrome.storage.sync.get(["timeStorage"], function(items){
-				console.log(items['timeStorage']);			
-			});
-
 		}
 	)}, 1000);
 
@@ -92,4 +88,11 @@ function parseDocsUrl(url){
 
 function resetStorage(){
 	chrome.storage.sync.set({ "timeStorage": {} }, function(){});
+}
+
+function printStorage(){
+	// For debugging, print timeStorage every second
+	chrome.storage.sync.get(["timeStorage"], function(items){
+		console.log(items['timeStorage']);			
+	});
 }
