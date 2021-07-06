@@ -3,7 +3,7 @@ var tabId;
 var currentState = "active";
 var visibilityState = "visible";
 
-resetStorage()
+resetStorage();
 
 // Check to see if local storage already exists
 chrome.storage.sync.get(["timeStorage"], function(items){
@@ -40,7 +40,7 @@ setInterval(function(){
 				chrome.storage.sync.get(["timeStorage"], function(items){				
 
 					if (!(tabUrlShortened in items['timeStorage'])){
-						items['timeStorage'][tabUrlShortened] = 0;
+						items['timeStorage'][tabUrlShortened] = {};
 					}
 
 					chrome.idle.queryState(30, function(status){
@@ -67,7 +67,7 @@ setInterval(function(){
 				
 			}
 		}
-	)}, 1000);
+	);}, 1000);
 
 
 // Components

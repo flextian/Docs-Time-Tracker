@@ -6,7 +6,7 @@ $('.docs-activity-indicator-container').append(html);
 // After json is sent to doc tab
 function processMessage(message, sender, sendResponse){
 
-    console.log(message)
+    console.log(message);
 
     // If message sent to tab is to get visibility
     if (message.visibilityRequest == 'true'){
@@ -21,7 +21,7 @@ function processMessage(message, sender, sendResponse){
         var seconds = Math.floor(message.time % 60);
         var displayText = hours + " Hours " + minutes + " Minutes " + seconds + " Seconds";
         if (message.state == "idle"){
-            displayText += ' - Idle'
+            displayText += ' - Idle';
         }
         document.getElementById("time-span").innerHTML = displayText;
     }
